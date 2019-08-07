@@ -17,35 +17,22 @@ int main( int argc , char ** argv )
 	cin.tie(NULL) ; 
 	
 	int n;
-	cin >>n;
-	int * arr = new int[n];
-	int max =0,min=0;
-	int j=1;
-	for (int i = 0; i < n; ++i)
-	{
-		cin>>arr[i];
-
-		while(j==1){
-			min = arr[0];
-			j--;
-		}
-
-		if (arr[i]>=max)
-		{
-			max=arr[i];
-		}
-		if (arr[i]<=min)
-		{
-			min=arr[i];
-		}
-	}
-
-	//cout <<max  << '\n';
-	//cout << min << '\n';
-	cout <<max-min<< '\n';
-
-
-	return 0 ; 
+  	cin>>n;
+  	int a[n];
+  	for(int i=0;i<n;i++)
+    cin>>a[i];
+ 	 int profit=0;
+ 	 for(int i=0;i<n-1;i++)
+ 	 {
+    	for(int j=i;j<n;j++)
+    	{
+     	 if((a[j]-a[i]>0) && ((a[j]-a[i])>profit))
+    	  {
+     	   profit=a[j]-a[i];
+     	 }
+   	 }
+ 	 }
+  	cout<<profit<<endl;
 
 
 
