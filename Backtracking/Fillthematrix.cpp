@@ -41,13 +41,6 @@ yes
 no
 */
 
-
-
-
-
-
-
-
 #include <bits/stdc++.h>
 using namespace std;
 
