@@ -43,7 +43,7 @@ Explanation:
 
 using namespace std;
 
-int helper(int start, int end, int N, int &ans){
+long long helper(long long start, long long end, long long N, long long &ans){
 	// cout << "start: "<<start << '\n';
 	// cout << "end "<<end << '\n';
 	
@@ -52,14 +52,14 @@ int helper(int start, int end, int N, int &ans){
 		return ans;
 	}
 
-	int n = N;
+	long long n = N;
 
-	int mid = (start+end)/2;
+	long long mid = (start+end)/2;
 	//cout << "mid; "<<mid << '\n';
-	int k =  mid;
+	long long k =  mid;
 	//cout << k << '\n';
 
-	int sharma = 0, singh = 0;
+	long long sharma = 0, singh = 0;
 
 	while(n>=k && n>0){
 		sharma += k;
@@ -94,7 +94,7 @@ int main( int argc , char ** argv )
 	ios_base::sync_with_stdio(false) ; 
 	cin.tie(NULL) ; 
 	
-	int n;
+	long long n;
 	cin>>n;
 
 	cout << helper(1, n, n, n) << '\n';
