@@ -66,162 +66,177 @@ CALIFORNIA
 
 */
 
-#include <bits/stdc++.h>
-
+#include<iostream>
 using namespace std;
-
-bool check_vertical(vector<string> matrix, int x, int y, string current_word, vector<bool>& checker){
-	int n=matrix.size();
-
-	if (x<0 || y<0 || x>=n || y>=n)
+char crossWord[10][10];
+ 
+bool isValidHorizontal(int row, int col, string word){
+ 
+	if(10 - col < word.length())
+		return false;
+ 
+	for (int i = 0, j = col; i < word.length(); ++i,j++)
 	{
-		return 0;
-	}
-
-	if (current_word.size()==1)
-	{
-		if (matrix[x][y]=='-')
-		{
-			matrix[x][y]=current_word.substr(0,1);
-			checker.push_back(1);
-			return 1;
-
-		}else if (matrix[x][y]==current_word.substr(0,1))
-		{
-			checker.push_back(0);
-			return 1;
+		if (crossWord[row][j] != '-' && crossWord[row][j] != word[i]){
+			return false;
 		}
-
-		return 0;
 	}
-
-	int small = check_vertical(matrix, x, y, current_word.substr(0,1));
-	int recur = check_vertical(matrix, x, y+1, current_word.substr(1, n-1));
-
-	return(small && recur);
+ 
+	return true;
 }
-
-void reset_horizontal(vector<string> matrix, int x, int y, vector<bool> checker, int i){
-	if (i>=checker.size())
+ 
+bool isValidVertical(int row, int col, string word){
+ 
+	if(10 - row < word.length())
+		return false;
+ 
+	for (int i = row, j = 0; j < word.length(); ++i,j++)
 	{
-		return;
-	}
-
-	if (checker[i]==1)
-	{
-		matrix[x][y]='-';
-		i++;
-	}else{
-		i++;
-	}
-
-	reset_horizontal(matrix, x+1, y, checker , i);
-}
-
-void reset_vertical(vector<string> matrix, int x, int y, vector<bool> checker, int i){
-	if (i>=checker.size())
-	{
-		return;
-	}
-
-	if (checker[i]==1)
-	{
-		matrix[x][y]='-';
-		i++;
-	}else{
-		i++;
-	}
-
-	reset_vertical(matrix, x, y+1, checker , i);
-
-}
-
-bool check_horizontal(vector<string> matrix, int x, int y, string current_word){
-	int n=matrix.size();
-
-	if (x<0 || y<0 || x>=n || y>=n)
-	{
-		return 0;
-	}
-
-	if (current_word.size()==1)
-	{
-		if (matrix[x][y]=='-')
-		{
-			checker.push_back(1);
-			matrix[x][y]=current_word.substr(0,1);
-			return 1;
-
-		}else if (matrix[x][y]==current_word.substr(0,1))
-		{
-			checker.push_back(0);
-			return 1;
+		if (crossWord[i][col] != '-' && crossWord[i][col] != word[j]){
+			return false;
 		}
-
-		return 0;
 	}
-
-	int small = check_vertical(matrix, x, y, current_word.substr(0,1));
-	int recur = check_vertical(matrix, x+1, y, current_word.substr(1, n-1));
-
-	return(small && recur);
+ 
+	return true;
 }
-
-void solvePuzzle(vector<string> words, vector<string>matrix, int a, int n){
-	for (int p = 0; p < words.size(); ++p)
+ 
+void setHorizontal(int row, int col, string word, bool state[]){
+ 
+	for (int i = 0, j = col; i < word.size(); ++i, j++)
 	{
-		string current_word = words.at(i);
-		
-		
-
+		if (crossWord[row][j] != '+'){
+ 
+			if(crossWord[row][j] == word[i])
+				state[i] = false;
+			else
+				state[i] = true;
+			crossWord[row][j] = word[i];
+		}
+ 
 	}
-
-
 }
-
-int main( int argc , char ** argv )
-{
-	ios_base::sync_with_stdio(false) ; 
-	cin.tie(NULL) ;
-	int n1 = 10;
-	
-	std::vector<string> matrix;
-	for (int i = 0; i < n1; ++i)
+ 
+void setVertical(int row, int col, string word, bool state[]){
+ 
+	for (int i = 0, j = row; i < word.size(); ++i, j++)
 	{
-		string temp;
-		std::cin>>temp;
-		matrix.push_back(temp);
+		if (crossWord[j][col] != '+'){
+ 
+			if(crossWord[j][col] == word[i])
+				state[i] = false;
+			else
+				state[i] = true;
+			crossWord[j][col] = word[i];
+		}
+ 
 	}
-
-	vector<string> words;
-	string temp_input;
-	cin>>temp_input;
-
-	string buffer = "";
-
-	for (int i = 0; i < temp_input.size(); ++i)
+}
+ 
+void resetHorizontal(int row, int col, bool state[], int size){
+ 
+	for (int i = 0, j = col; i < size; ++i,j++)
 	{
-		if (i==temp_input.size()-1)
-		{
-			buffer = buffer+temp_input[i];
-			words.push_back(buffer);
-			break;
-		}
-
-		if (temp_input[i] == ',')
-		{
-			words.push_back(buffer);
-			buffer = "";
-			continue;
-		}
-		
-		buffer = buffer+temp_input[i];
+		if(state[i] == true)
+			crossWord[row][j] = '-';
 	}
-
-	solvePuzzle(words, matrix, 0, n1);
-
-	return 0 ; 
-
-
-
+	return;
+}
+ 
+void resetVertical(int row, int col, bool state[], int size){
+ 
+	for (int i = 0, j = row; i < size; ++i,j++)
+	{
+		if(state[i] == true)
+			crossWord[j][col] = '-';
+	}
+	return;
+}
+ 
+void set_value(bool helper[],int len ){
+	for(int i=0;i<len;i++){
+		helper[i] = false;
+	}
+}
+ 
+ 
+bool crossWordHelper(string input[], int size, int index){
+ 
+	if(index == size){
+		for(int i =0; i<10; i++){
+			for(int j=0; j<10; j++){
+ 
+				cout << crossWord[i][j] ;
+			}
+			cout << endl;
+		}
+		return true;
+	}
+ 
+	for(int i =0; i<10; i++){
+		for(int j=0; j<10; j++){
+ 
+			if(crossWord[i][j] == '-' || crossWord[i][j] == input[index][0]){
+				int length = input[index].size();
+				bool state[length];
+				set_value(state,length);
+ 
+				if(isValidHorizontal(i, j, input[index])){
+					setHorizontal(i, j, input[index], state);
+					if(crossWordHelper(input, size, index+1)){
+						return true;
+					}
+					resetHorizontal(i, j, state, length);
+				}
+ 
+				if(isValidVertical(i, j, input[index])){
+					setVertical(i, j, input[index], state);
+					if(crossWordHelper(input, size, index+1)){
+						return true;
+					}
+					resetVertical(i, j, state, length);
+				}
+ 
+			}
+		}
+	}
+	return false;
+}
+ 
+void solveCrossWord(string input[], int size){
+ 
+	bool res = crossWordHelper(input, size, 0);
+	return;
+}
+ 
+int main(){
+	string ss;
+	for(int i = 0; i<10; i++){
+		cin >>ss;
+		for(int j = 0; j < ss.size(); j++){
+			crossWord[i][j] =  ss[j];
+		}
+	}
+ 
+	char s[200];
+	cin >> s;
+ 
+	string input[10];
+	char ch;
+	string word ="";
+	int a =0;
+	for (int i = 0; s[i] != '\0'; ++i)
+	{
+ 
+		if(s[i] == ';'){
+			input[a++] = word;
+			word ="";
+		}
+		else {
+			word += s[i];
+		}
+	}
+	input[a++] = word;
+ 
+	solveCrossWord(input, a);
+return 0;
 }
