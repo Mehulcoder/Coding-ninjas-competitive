@@ -75,7 +75,7 @@ long long helper(long long start, long long end, long long N, long long &ans){
 	
 	// cout << sharma << '\n';
 	// cout << N/2 << '\n';
-	if (sharma<=N/2)	
+	if (2*sharma<N)	
 	{
 		return helper(mid+1, end, N, ans);
 	}else{
