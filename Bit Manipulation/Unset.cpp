@@ -36,6 +36,8 @@ int turnOffIthBit(int n, int i){
     return (n & ~(1 << (i))); 
     
 }
+
+
 int main( int argc , char ** argv )
 {
 	ios_base::sync_with_stdio(false) ; 
@@ -48,10 +50,5 @@ int main( int argc , char ** argv )
 	cout<< turnOffIthBit(n, i) <<endl;
 		
 	return 0;
-
-
-	
-
-
 
 }
