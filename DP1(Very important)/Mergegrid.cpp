@@ -1,4 +1,4 @@
-				int a;
+				
 /*
 
 				Name: Mehul Chaturvedi
