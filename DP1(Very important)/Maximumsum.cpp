@@ -35,24 +35,13 @@ int kadane(vector<int> v){
 
 	for (int i = 0; i < n; ++i)
 	{
-		if (maxendinghere+v[i]<v[i])
-		{
-			maxendinghere = v[i];
-		}else{
-			maxendinghere += v[i];
-		}
+		maxendinghere = max(v[i], v[i]+maxendinghere);
 
-		if (maxendinghere>maxtillnow)
-		{
-			maxtillnow = maxendinghere;
-		}
-
+		maxtillnow = max(maxtillnow, maxendinghere);
 		
 	}
 
 	return maxtillnow;
-
-
 
 }
 
