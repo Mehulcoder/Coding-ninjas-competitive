@@ -41,7 +41,25 @@ using namespace std;
 int minCount(int n){
     //non Recursive solution
 
-    
+	std::vector<int> dp(n+1, 0);
+	dp[0] = 0;
+	dp[1] = 1;
+    for (int i = 1; i <= n; ++i)
+    {
+    	int count = INT_MAX;
+    	for (int j = 1; j <= i; ++j)
+    	{
+    		if (i-j*j<0)
+    		{
+    			break;
+    		}
+
+    		count = min(count, dp[i-j*j]);
+    	}
+    	dp[i] = 1+count;	
+    }
+
+    return dp[n];
 	
 }
 
