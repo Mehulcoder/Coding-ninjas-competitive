@@ -35,8 +35,8 @@ Sample Output
 
 using namespace std;
 void go(vector<int> rangers, int k, int x){
-	vector<int> buffer(1001, 0);
-	vector<int> ans(1001, 0);
+	vector<int> buffer(1025, 0);
+	vector<int> ans(1025, 0);
 
 	int n = rangers.size();
 
@@ -53,54 +53,49 @@ void go(vector<int> rangers, int k, int x){
 	// }
 	// }
 
+	ans = buffer;
 
 	while(k--){
 		int count = 0;
 		for (int i = 0; i < buffer.size(); ++i)
 		{
-			if (count%2==0)
-			{
+			if (count%2==0){
 				if(buffer[i]>0){
-				
-				ans[i] = (buffer[i]-1)/2;
-				int b  = i^x;
-				ans[b] += (buffer[i]+1)/2;
-
+				int p = (buffer[i]+1)/2;
+				ans[i^x] += p;
+				ans[i] -= p;
 				}
-
-
 			}else{
-
 				if(buffer[i]>0){
-				
-				ans[i] = (buffer[i]+1)/2;
-				int b  = i^x;
-				ans[b] += (buffer[i]-1)/2;
-				
+				int p = (buffer[i])/2;
+				ans[i^x] += p;
+				ans[i] -= p;
 				}	
 			}
 			count += buffer[i];
+			//cout << "count: "<<count;
 		}
 
 
 
 		buffer = ans;
+	//	fill(ans.begin(), ans.end(), 0);
 
 		
 	}
 	//return;
 
-	for (int i = ans.size()-1; i >= 0; --i)
+	for (int i = buffer.size()-1; i >= 0; --i)
 	{
-		if (ans[i]!=0)
+		if (buffer[i]!=0)
 		{
 			cout << i<<" ";
 			break;
 		}
 	}
-	for (int i = 0; i < ans.size(); ++i)
+	for (int i = 0; i < buffer.size(); ++i)
 	{
-		if (ans[i] != 0)
+		if (buffer[i] != 0)
 		{
 			cout << i << endl;
 			break;

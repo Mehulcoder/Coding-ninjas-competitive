@@ -47,17 +47,17 @@ Sample Output
 
 using namespace std;
 
-int go(int n, int k){
-	//vector<vector<vector<int>>> dp(n+1, vector<vector<int>>(k+1, vector<int>(2,0)));
+long long go(long long n, long long k){
+	//vector<vector<vector<long long>>> dp(n+1, vector<vector<long long>>(k+1, vector<long long>(2,0)));
 
-	int dp[n + 1][k + 1][2]; 
+	long long dp[n + 1][k + 1][2]; 
     memset(dp, 0, sizeof(dp)); 
 	dp[1][0][0] = 1; 
     dp[1][0][1] = 1;
 
-    for (int i = 2; i < n+1; ++i)
+    for (long long i = 2; i < n+1; ++i)
     {
-    	for (int j = 0; j < i; ++j)
+    	for (long long j = 0; j < i; ++j)
     	{
     		if(j==0)
             {
@@ -72,7 +72,7 @@ int go(int n, int k){
     	}
     }
 
-     return dp[n][k][0] + dp[n][k][1]; 
+     return dp[n][k][0]%(1000000007) + dp[n][k][1]%(1000000007); 
 
 }
 
@@ -82,10 +82,10 @@ int main( int argc , char ** argv )
 	ios_base::sync_with_stdio(false) ; 
 	cin.tie(NULL) ; 
 	
-	int p;
+	long long p;
 	cin>>p;
 	while(p--){
-		int s, n, k;
+		long long s, n, k;
 		cin>>s>>n>>k;
 
 		cout << s << " " << go(n, k) << '\n';
