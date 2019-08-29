@@ -46,14 +46,14 @@ Bill Gates will choose packets having 10, 20 and 30 candies.So unfairness will b
 
 using namespace std;
 
-long long go(vector<long long> candies, long long n, long long k){
+long go(vector<long> candies, long n, long k){
 	//size is n+1
 
 	sort(candies.begin(), candies.end());
 
-	long long sum = 0;
-	long long buffer = 0;
-	for (long long i = 1; i <=k; ++i)
+	long sum = 0;
+	long buffer = 0;
+	for (long i = 1; i <=k; ++i)
 	{
 		sum += i*candies[i];
 		sum -= (k-i+1)*candies[i];
@@ -62,8 +62,8 @@ long long go(vector<long long> candies, long long n, long long k){
 	}
 
 
-	long long ans = sum;
-	for (long long i = 2; i <= n-k+1; ++i)
+	long ans = sum;
+	for (long i = 2; i <= n-k+1; ++i)
 	{
 		sum = sum - 2*(buffer - candies[i-1])+(k-1)*candies[i-1]+(k-1)*candies[i+k-1];
 		
@@ -81,10 +81,10 @@ int main( int argc , char ** argv )
 	ios_base::sync_with_stdio(false) ; 
 	cin.tie(NULL) ; 
 	
-	long long n, k;
+	long n, k;
 	cin>>n>>k;
 
-	vector<long long> candies(n+1, 0);
+	vector<long> candies(n+1, 0);
 	for (int i = 1; i <= n; ++i)
 	{
 		cin>>candies[i];
