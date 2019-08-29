@@ -44,36 +44,42 @@ Sample Output
 */
 
 #include <bits/stdc++.h>
-
+ 
 using namespace std;
-
+const int M = 1000000007;
+ 
 long long go(long long n, long long k){
-	//vector<vector<vector<long long>>> dp(n+1, vector<vector<long long>>(k+1, vector<long long>(2,0)));
-
-	long long dp[n + 1][k + 1][2]; 
+    //vector<vector<vector<long long>>> dp(n+1, vector<vector<long long>>(k+1, vector<long long>(2,0)));
+ 
+    long long dp[n + 1][k + 1][2]; 
     memset(dp, 0, sizeof(dp)); 
-	dp[1][0][0] = 1; 
+    dp[1][0][0] = 1; 
     dp[1][0][1] = 1;
-
-    for (long long i = 2; i < n+1; ++i)
+ 
+    for (int i = 2; i < n+1; ++i)
     {
-    	for (long long j = 0; j < i; ++j)
-    	{
-    		if(j==0)
-            {
-                dp[i][j][1]=dp[i-1][j][0];
-                dp[i][j][0]=dp[i-1][j][0]+dp[i-1][j][1];
-            }
-            else
-            {
-                dp[i][j][0]=dp[i-1][j][0]+dp[i-1][j][1];
-                dp[i][j][1]=dp[i-1][j-1][1]+dp[i-1][j][0];
-            }
-    	}
+        for (int j = 0; j <= k; ++j)
+        {
+            // if(j==0)
+            // {
+            // dp[i][j][1]=dp[i-1][j][0]%(1000000007);
+            // dp[i][j][0]=(dp[i-1][j][0]+dp[i-1][j][1])%(1000000007);
+            // }
+            // else
+            // {
+            // dp[i][j][0]=(dp[i-1][j][0]+dp[i-1][j][1])%(1000000007);
+            // dp[i][j][1]=(dp[i-1][j-1][1]+dp[i-1][j][0])%(1000000007);
+            // }
+ 
+            dp[i][j][0] = (dp[i-1][j][0]%M + dp[i-1][j][1]%M )%M;
+            if(j>0)
+                dp[i][j][1] = dp[i-1][j-1][1]%M;
+            dp[i][j][1] = (dp[i][j][1]%M + dp[i-1][j][0]%M )%M;
+        }
     }
-
-     return dp[n][k][0]%(1000000007) + dp[n][k][1]%(1000000007); 
-
+ 
+    return (dp[n][k][0]) + dp[n][k][1];
+ 
 }
 
 
