@@ -42,9 +42,7 @@ Sample Output
 0
 */
 
-#include <bits/stdc++.h>
 
-using namespace std;
 /*
 RECURSIVE SOLUTION WITHOUT DP
 int go(string s1, string s2, int k, int i, int j){
@@ -96,10 +94,61 @@ int go(string s1, string s2, int k, int i, int j){
 
 }*/
 
+/*
+			MEMOIZATION SOLUTION
+#include <bits/stdc++.h>
+using namespace std;
+int maxHappiness(string s1,string s2,int k,int output[][101][101]){
+    if(k==0){
+       return 0;
+    }
+    if(s1.size()==0 || s2.size()==0)
+        return INT_MIN;
+    if(output[s1.size()][s2.size()][k]!=-1)
+        return output[s1.size()][s2.size()][k];
+    if(s1[0]==s2[0]){
+       int option1=maxHappiness(s1.substr(1),s2.substr(1),k-1,output)+s1[0];
+       int option2=maxHappiness(s1,s2.substr(1),k,output);
+       int option3=maxHappiness(s1.substr(1),s2,k,output);
+        int ans=max(option1,max(option2,option3));
+        output[s1.size()][s2.size()][k]=ans;
+        return ans;
+    }
+    else{
+       int option1=maxHappiness(s1.substr(1),s2,k,output);
+       int option2=maxHappiness(s1,s2.substr(1),k,output);
+        int ans=max(option1,option2);
+        output[s1.size()][s2.size()][k]=ans;
+        return output[s1.size()][s2.size()][k];
+    }
+}
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--){
+        string s1,s2;
+        cin>>s1>>s2;
+        int k;
+        cin>>k;
+        int output[101][101][101];
+        memset(output,-1,101*101*101*sizeof(int));
+        int ans=maxHappiness(s1,s2,k,output);
+        if(ans<0)
+            cout<<"0"<<endl;
+        else
+            cout<<ans<<endl;
+    }
+    return 0;
+}	
+*/
 
 
 
 //DP SOULUTION
+#include <bits/stdc++.h>
+
+using namespace std;
 int go(string s1, string s2, int k){
 
 
