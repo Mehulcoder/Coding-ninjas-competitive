@@ -1,7 +1,2 @@
-2
-asdf
-asdf
-3
-anandi
-jagya
-3
+abc
+dc

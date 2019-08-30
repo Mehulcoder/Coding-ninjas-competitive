@@ -34,6 +34,52 @@ Sample Output 1 :
 
 using namespace std;
 
+int editDistance(string s1, string s2){
+	int m = s1.size();
+	int n = s2.size();
+
+	vector<vector<int>>dp(m+1, vector<int>(n+1, 0));
+
+	for (int i = 0; i < m+1; ++i)
+	{
+		dp[i][n] = m-i;
+	}
+
+
+	for (int i = 0; i < n+1; ++i)
+	{
+		dp[m][i] = n-i;
+	}
+
+	//dp[m][n] = 0;
+
+	for (int i = m-1; i >= 0; --i)
+	{
+		for (int j = n-1; j >= 0; --j)
+		{
+			if(s1[i]==s2[j]){
+				dp[i][j] = dp[i+1][j+1];
+			}else{
+
+				dp[i][j] = min(1+dp[i+1][j+1], min(1+dp[i+1][j], 1+dp[i][j+1]));
+			}
+		}
+	}
+
+	// for (int i = 0; i < m+1; ++i)
+	// {
+	// 	for (int j = 0; j < n+1; ++j)
+	// 	{
+	// 		cout<<dp[i][j]<<" ";
+	// 	}
+	// 	cout << '\n';
+	// }
+
+
+	return dp[0][0];
+
+}
+
 
 int main( int argc , char ** argv )
 {
@@ -41,7 +87,13 @@ int main( int argc , char ** argv )
 	cin.tie(NULL) ; 
 	
 
+	string s1;
+	string s2;
 
+  	cin >> s1;
+ 	cin >> s2;
+
+  	cout << editDistance(s1,s2) << endl;
 
 	return 0 ; 
 
