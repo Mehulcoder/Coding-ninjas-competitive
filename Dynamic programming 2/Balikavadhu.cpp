@@ -45,16 +45,151 @@ Sample Output
 #include <bits/stdc++.h>
 
 using namespace std;
+/*
+RECURSIVE SOLUTION WITHOUT DP
+int go(string s1, string s2, int k, int i, int j){
+
+
+	int l1 = s1.size()-i;
+	int l2 = s2.size()-j;
+
+	//Recursive solution
+
+	if(k>l1 || k>l2){
+		return 0;
+	}
+
+	if(k<=0){
+		return 0;
+	}
+
+	
+
+	if (s1[i] == s2[j])
+	{
+		//I include the eqaul character
+		int go1 = s1[i] + go(s1, s2, k-1, i+1, j+1);
+		//If function fails to bring enough characters for i+1, j+1
+		if (go(s1, s2, k-1, i+1, j+1) == 0 && k>1)
+		{
+			go1 = 0;
+		}
+		//I do not include the equal character
+		int go2 = go(s1, s2, k, i+1, j+1) ;
+		//Alternatively include them
+		int go3 = go(s1, s2, k, i+1, j) ;
+		int go4 = go(s1, s2, k, i, j+1) ;
+		
+		
+		return max(go1,max(go2,max(go3,go4)));
+		
+
+	}else{
+
+		//Alternatively include them
+		int go3 = go(s1, s2, k, i+1, j) ;
+		int go4 = go(s1, s2, k, i, j+1) ;
+		return max(go3,go4);
+
+	}
+
+
+}*/
+
+
+
+
+//DP SOULUTION
 int go(string s1, string s2, int k){
-	int l1 = s1.size();
-	int l2 = s2.size();
-
-	
-	
 
 
+	int m = s1.size();
+	int n = s2.size();
 
-}
+	int dp[m+1][n+1][k+1];
+	memset(dp, -1, sizeof(dp));
+
+	for (int i = 0; i < m+1; ++i)
+	{
+		for (int j = 0; j < n+1; ++j)
+		{
+			dp[i][j][0] = 0;
+		}
+	}
+
+	//starting from n(out of string) in second string
+	for (int i = 0; i < m+1; ++i)
+	{
+		for (int p = 0; p < k+1; ++p)
+		{
+			dp[i][n][p] = 0;
+		}
+	}
+
+	//starting from m(out of string) in first string
+	for (int i = 0; i < n+1; ++i)
+	{
+		for (int p = 0; p < k+1; ++p)
+		{
+			dp[m][i][p] = 0;
+		}
+	}
+
+
+	for (int i = m-1; i >= 0; --i)
+	{
+		for (int j = n-1; j >= 0; --j)
+		{
+			for (int p = 1; p < k+1; ++p)
+			{
+				if(s1[i] == s2[j]){
+					if (p>m-i || p>n-j)
+					{
+						dp[i][j][p] = 0;
+				
+						continue;
+					}
+
+
+					int go1 = int(s1[i]) + dp[i+1][j+1][p-1];
+					//If function fails to bring enough characters for i+1, j+1
+					if (dp[i+1][j+1][p-1] == 0 && p>1)
+					{
+						go1 = 0;
+					}
+					//I do not include the equal character
+					int go2 = dp[i+1][j+1][p] ;
+
+					//Alternatively include them
+					int go3 = dp[i+1][j][p] ;
+					int go4 = dp[i][j+1][p] ;
+			
+					dp[i][j][p] = max(go1,max(go2,max(go3,go4)));
+				
+
+				}else{
+					if (p>m-i || p>n-j)
+					{
+						dp[i][j][p] = 0;
+						continue;
+					}
+					int go3 = dp[i+1][j][p] ;
+					int go4 = dp[i][j+1][p] ;
+
+					dp[i][j][p] = max(go3,go4);
+
+
+				}
+			}
+		}
+	}
+
+
+	return dp[0][0][k];
+
+
+}	
+
 
 int main( int argc , char ** argv )
 {
@@ -66,7 +201,7 @@ int main( int argc , char ** argv )
 
 	while(n--){
 		string s1, s2;
-		int k
+		int k;
 		cin>>s1>>s2>>k;
 
 		cout << go(s1, s2, k) << '\n';
