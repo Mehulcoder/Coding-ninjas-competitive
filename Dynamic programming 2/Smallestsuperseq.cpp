@@ -30,7 +30,7 @@ int go(string s1, string s2, int i, int j, int** mem){
 	int m = s1.size();
 	int n = s2.size();
 
-	cout << m<<" "<<n << '\n';
+	//cout << m<<" "<<n << '\n';
 
 	if (i > m-1)
 	{
