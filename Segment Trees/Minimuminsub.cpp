@@ -118,6 +118,8 @@ int main( int argc , char ** argv )
 
 	create(arr, tree, 0, n-1, 0);
 
+	
+
 	while(q--){
 		char a;
 		int b, c;
