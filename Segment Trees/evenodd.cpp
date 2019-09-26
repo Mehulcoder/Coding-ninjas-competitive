@@ -49,12 +49,37 @@ Sample Output
 
 using namespace std;
 
+void update(int* arr, int* tree, int start, int end, int treeNode, int idx, int value){
+	int mid = (start+end)/2;
+
+	if (start == end)
+	{
+		arr[idx] = value;
+		tree[treeNode] = (value%2==0);
+		return;
+	}
+
+	if (idx<=mid)
+	{
+		update(arr, tree, start, mid, 2*treeNode+1, idx, value);
+	}else{
+
+		update(arr, tree, mid+1, end, 2*treeNode+2, idx, value);
+	}
+
+	int left = tree[2*treeNode+1];
+	int right = tree[2*treeNode+2];
+
+	tree[treeNode] = left+right;
+	return;
+}
+
 int query(int*tree, int start, int end, int treeNode, int left, int right){
 	
 	//Completely out
 	if (left>end || right<start)
 	{
-		return -1;
+		return 0;
 	}
 
 	//Completely inside
@@ -65,30 +90,41 @@ int query(int*tree, int start, int end, int treeNode, int left, int right){
 
 	//Partially inside
 	int mid = (start+end)/2;
+	if(left>mid){
+		return query(tree, mid+1, end, 2*treeNode+2, left, right);
+	}
+
+	if(right<=mid){
+		return query(tree, start, mid, 2*treeNode+1, left, right);
+	}
 
 	int l = query(tree, start, mid, 2*treeNode+1, left, right);
 	int r = query(tree, mid+1, end, 2*treeNode+2, left, right);
+//	cout <<"L "<< l<<" R "<<r<<" "<<2*treeNode+1<<" "<<2*treeNode+2 << '\n';
 
 
 	int result;
-	result = left+right;
+	result = l+r;
    	return result;
 
 }
 
 //tree will store even count
 void create(int* arr, int* tree, int start, int end, int treeNode){
+
 	if (end == start)
 	{
+		//cout << end << '\n';
 		if (arr[start]%2==0)
 		{
 			tree[treeNode] = 1;
 		}else{
 			tree[treeNode] = 0;
 		}
+		return;
 	}
-
 	int mid = (start+end)/2;
+//	return ;
 
 	create(arr, tree, start, mid, 2*treeNode+1);
 	create(arr, tree, mid+1, end, 2*treeNode+2);
@@ -109,28 +145,38 @@ int main( int argc , char ** argv )
 	int n, q;
 	cin>>n;
 	int* arr = new int[n];
-
+	for (int i = 0; i < n; ++i)
+	{
+		cin>>arr[i];
+	}
 	cin>>q;
 	int* tree = new int[4*n];
-
+	//return 0;
 	create(arr, tree, 0, n-1, 0);
-
+	// for (int i = 0; i < 4*n; ++i)
+	// {
+	// 	cout << "I- "<<i<<"   "<<tree[i] << '\n';
+	// }
+	//return 0;
 	for (int i = 0; i < q; ++i)
 	{
 		int a, b, c;
 		cin>>a>>b>>c;
 		if (a == 1)
 		{
-			cout << query(tree, 0, n-1, 0, b, c) << '\n';
+			cout << query(tree, 0, n-1, 0, b-1, c-1) << '\n';
 		}else if(a == 0)
 		{
-			update(arr, tree, 0, n-1, 0, b, c);
+			update(arr, tree, 0, n-1, 0, b-1, c);
 		}else{
 
-			int k = query(tree, 0, n-1, 0, b, c);
-			cout << b-c+1-k << '\n';
+			int k = query(tree, 0, n-1, 0, b-1, c-1);
+			cout << c-b+1-k << '\n';
 		}
 	}
+
+	delete[] tree;
+	delete[] arr;
 
 
 
