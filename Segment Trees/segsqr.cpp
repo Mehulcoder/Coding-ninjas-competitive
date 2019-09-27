@@ -43,10 +43,63 @@ Case 2:
 
 */
 
-
 #include <bits/stdc++.h>
 
 using namespace std;
+
+class treeclass{
+public:
+		int sumsquare;
+		int sum;
+};
+
+class lazyclass{
+public:
+	int type;
+	int key;
+};
+
+//Type 1 for increment
+//Type 2 for change
+
+// void update1(int* arr, treeclass* tree, lazyclass* lazy, int start, int end, int treeNode, int left ,int right, int value){
+
+// 	if (start>end)
+// 	{
+// 		return;
+// 	}
+
+// 	if (lazy[treeNode]!=0)
+// 	{
+// 		tree[treeNode]
+// 	}
+
+
+// }
+
+void create(int* arr, treeclass* tree, int start, int end, int treeNode){
+	if (start == end)
+	{
+		tree[treeNode].sumsquare = arr[start]*arr[start];
+		tree[treeNode].sum = arr[start];
+		return;
+	}
+
+	int mid = (start+end)/2;
+
+	create(arr, tree, start, mid, 2*treeNode+1);
+	create(arr, tree, mid+1, end, 2*treeNode+2);
+
+	treeclass left = tree[2*treeNode+1];
+	treeclass right = tree[2*treeNode+2];
+
+
+	tree[treeNode].sumsquare = left.sumsquare+right.sumsquare;
+	tree[treeNode].sum = left.sum+right.sum;
+
+	return;
+
+}
 
 
 int main( int argc , char ** argv )
@@ -54,18 +107,54 @@ int main( int argc , char ** argv )
 	ios_base::sync_with_stdio(false) ; 
 	cin.tie(NULL) ; 
 	
-	int n, q;
-	cin>>n>>q;
-	int* arr = new int[n];
+	int t;
+	cin>>t;
 
-	for (int i = 0; i < n; ++i)
-	{
-		cin>>arr[i];
+	while(t--){
+		int n, q;
+		cin>>n>>q;
+
+		int* arr = new int[n];
+		
+		for (int i = 0; i < n; ++i)
+		{
+			cin>>arr[i];
+		}
+
+		treeclass* tree = new treeclass[4*n];
+
+		create(arr, tree, 0, n-1, 0);
+		for (int i = 0; i < 4*n; ++i)
+		{
+			cout << "squares "<<tree[i].sumsquare<<" sum "<<tree[i].sum << '\n';
+		}
+
+		/*while(q--){
+			int a
+			cin>>a;
+
+			if (a==2)
+			{
+				int b,c;
+				cin>>b>>c;
+				cout << query(tree, 0, n-1, 0, b, c) << '\n';
+
+			}else if (a==1)
+			{
+				//1 forIncrement
+				int b, c, x;
+				cin>>b>>c>>x;
+				update1(arr, tree, 0, n-1, 0, b, c, x);
+
+			}else if(a==0){
+				//2 for change
+				int b, c, x;
+				cin>>b>>c>>x;
+				update2(arr, tree, 0, n-1, 0, b, c, x)
+			}
+		}
+		*/
 	}
-
-
-	return 0 ; 
-
 
 
 }
