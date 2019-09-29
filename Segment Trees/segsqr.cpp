@@ -56,26 +56,210 @@ public:
 class lazyclass{
 public:
 	int type;
-	int key;
+	int data;
 };
+
+
 
 //Type 1 for increment
 //Type 2 for change
 
-// void update1(int* arr, treeclass* tree, lazyclass* lazy, int start, int end, int treeNode, int left ,int right, int value){
+void update1(lazyclass* lazy, treeclass* tree, int start, int end, int treeNode, int left ,int right, int value){
 
-// 	if (start>end)
-// 	{
-// 		return;
-// 	}
+	if (start>end)
+	{
+		return;
+	}
 
-// 	if (lazy[treeNode]!=0)
-// 	{
-// 		tree[treeNode]
-// 	}
+	if (lazy[treeNode].data!=0 && lazy[treeNode].type == 1)
+	{
+		tree[treeNode].sumsquare += 2*lazy[treeNode].data*tree[treeNode].sum+lazy[treeNode].data*lazy[treeNode].data*(right-left+1);
+		tree[treeNode].sum += lazy[treeNode].data*(right-left+1);
 
+		if (start!=end)
+		{
+			lazy[2*treeNode+1].data += lazy[treeNode].data;
+			lazy[2*treeNode+1].type = 1;
+			lazy[2*treeNode+2].type = 1;
+			lazy[2*treeNode+2].data += lazy[treeNode].data;
+		}
 
-// }
+		lazy[treeNode].data = 0;
+	}
+    
+    if (lazy[treeNode].data!=0 && lazy[treeNode].type == 2)
+	{
+        int value = lazy[treeNode].data;
+        tree[treeNode].sumsquare = (value * value) * (right-left+1);
+        tree[treeNode].sum = value * (right-left +1);
+		
+
+		if (start!=end)
+		{
+			lazy[2*treeNode+1].data += lazy[treeNode].data;
+			lazy[2*treeNode+1].type = 2;
+			lazy[2*treeNode+2].type = 2;
+			lazy[2*treeNode+2].data += lazy[treeNode].data;
+		}
+
+		lazy[treeNode].data = 0;
+	}
+
+	//No overlap
+	if (left>end || right< start)
+	{
+		return;
+	}
+
+	//Full
+	if (left<=start && right>=end)
+	{
+		tree[treeNode].sumsquare += 2*value*tree[treeNode].sum+value*value*(right-left+1);
+		tree[treeNode].sum += value*(right-left+1);
+
+		if(start!=end){
+			lazy[treeNode*2+1].data += value;
+			lazy[2*treeNode+1].type = 1;
+			lazy[2*treeNode+2].type = 1;
+			lazy[treeNode*2+2].data += value;
+		}
+
+		return;
+	}
+
+	//Partial
+	int mid = (start+end)/2;
+
+	update1(lazy, tree, start, mid, 2*treeNode+1, left, right, value);
+	update1(lazy, tree, mid+1, end, 2*treeNode+2, left, right, value);
+
+	tree[treeNode].sumsquare = tree[2*treeNode+1].sumsquare+tree[2*treeNode+2].sumsquare;
+	tree[treeNode].sum = tree[2*treeNode+1].sum+tree[2*treeNode+2].sum;
+
+	return;
+}
+
+void update2(lazyclass* lazy, treeclass* tree, int start, int end, int treeNode, int left ,int right, int value){
+
+	if (start>end)
+	{
+		return;
+	}
+
+	if (lazy[treeNode].data!=0 && lazy[treeNode].type == 2)
+	{
+		tree[treeNode].sumsquare = lazy[treeNode].data*lazy[treeNode].data*(right-left+1);
+		tree[treeNode].sum = lazy[treeNode].data*(right-left+1);
+
+		if (start!=end)
+		{
+			lazy[2*treeNode+1].data = lazy[treeNode].data;
+			lazy[2*treeNode+1].type = 2;
+			lazy[2*treeNode+2].type = 2;
+			lazy[2*treeNode+2].data = lazy[treeNode].data;
+		}
+
+		lazy[treeNode].data = 0;
+		lazy[treeNode].type = 1;
+	}
+
+	//No overlap
+	if (left>end || right< start)
+	{
+		return;
+	}
+
+	//Full
+	if (left<=start && right>=end)
+	{
+		tree[treeNode].sumsquare = value*value*(right-left+1);
+		tree[treeNode].sum = value*(right-left+1);
+
+		if(start!=end){
+			lazy[treeNode*2+1].data = value;
+			lazy[treeNode*2+1].type = 2;
+			lazy[treeNode*2+2].type = 2;
+			lazy[treeNode*2+2].data = value;
+		}
+
+		return;
+	}
+
+	//Partial
+	int mid = (start+end)/2;
+
+	update2(lazy, tree, start, mid, 2*treeNode+1, left, right, value);
+	update2(lazy, tree, mid+1, end, 2*treeNode+2, left, right, value);
+
+	tree[treeNode].sumsquare = tree[2*treeNode+1].sumsquare+tree[2*treeNode+2].sumsquare;
+	tree[treeNode].sum = tree[2*treeNode+1].sum+tree[2*treeNode+2].sum;
+
+	return;
+}
+
+int query(lazyclass* lazy, treeclass* tree, int start, int end, int treeNode, int left ,int right){
+
+	if (start>end)
+	{
+		return 0;
+	}
+	//Updation if value at lazytree is not zero
+	if (lazy[treeNode].data!=0)
+	{
+		if (lazy[treeNode].type==1)		
+		{
+			tree[treeNode].sumsquare += 2*lazy[treeNode].data*tree[treeNode].sum+lazy[treeNode].data*lazy[treeNode].data*(right-left+1);
+			tree[treeNode].sum += lazy[treeNode].data*(right-left+1);
+
+			if (start!=end)
+			{
+				lazy[2*treeNode+1].data += lazy[treeNode].data;
+				lazy[2*treeNode+1].type = 1;
+				lazy[2*treeNode+2].type = 1;
+				lazy[2*treeNode+2].data += lazy[treeNode].data;
+			}
+
+			lazy[treeNode].data = 0;
+			
+		}else{
+
+			tree[treeNode].sumsquare = lazy[treeNode].data*lazy[treeNode].data*(right-left+1);
+			tree[treeNode].sum = lazy[treeNode].data*(right-left+1);
+
+			if (start!=end)
+			{
+				lazy[2*treeNode+1].data = lazy[treeNode].data;
+				lazy[2*treeNode+1].type = 2;
+				lazy[2*treeNode+2].type = 2;
+				lazy[2*treeNode+2].data = lazy[treeNode].data;
+			}
+
+			lazy[treeNode].data = 0;
+			lazy[treeNode].type = 1;
+
+			}
+	}
+
+	//No overlap
+	if (left>end || right< start)
+	{
+		return 0;
+	}
+
+	//Full
+	if (left<=start && right>=end)
+	{
+		return tree[treeNode].sumsquare;
+	}
+
+	//Partial
+	int mid = (start+end)/2;
+
+	int l = query(lazy, tree, start, mid, 2*treeNode+1, left, right);
+	int r = query(lazy, tree, mid+1, end, 2*treeNode+2, left, right);
+
+	return l+r;
+}
 
 void create(int* arr, treeclass* tree, int start, int end, int treeNode){
 	if (start == end)
@@ -109,8 +293,11 @@ int main( int argc , char ** argv )
 	
 	int t;
 	cin>>t;
+	int i=1;
 
 	while(t--){
+		cout << "Case "<<i<<":"<< '\n';
+		i++;
 		int n, q;
 		cin>>n>>q;
 
@@ -121,39 +308,47 @@ int main( int argc , char ** argv )
 			cin>>arr[i];
 		}
 
-		treeclass* tree = new treeclass[4*n];
+		treeclass* tree = new treeclass[4*n]();
+		lazyclass* lazy = new lazyclass[4*n];
 
 		create(arr, tree, 0, n-1, 0);
-		for (int i = 0; i < 4*n; ++i)
-		{
-			cout << "squares "<<tree[i].sumsquare<<" sum "<<tree[i].sum << '\n';
-		}
+		// for (int i = 0; i < 4*n; ++i)
+		// {
+		// 	cout << "squares "<<tree[i].sumsquare<<" sum "<<tree[i].sum << '\n';
+		// }
 
-		/*while(q--){
-			int a
+		while(q--){
+			int a;
 			cin>>a;
 
 			if (a==2)
 			{
 				int b,c;
 				cin>>b>>c;
-				cout << query(tree, 0, n-1, 0, b, c) << '\n';
+				cout << query(lazy, tree, 0, n-1, 0, b-1, c-1) << '\n';
 
 			}else if (a==1)
 			{
 				//1 forIncrement
 				int b, c, x;
 				cin>>b>>c>>x;
-				update1(arr, tree, 0, n-1, 0, b, c, x);
+				update1(lazy, tree, 0, n-1, 0, b-1, c-1, x);
 
 			}else if(a==0){
 				//2 for change
 				int b, c, x;
 				cin>>b>>c>>x;
-				update2(arr, tree, 0, n-1, 0, b, c, x)
+				update2(lazy, tree, 0, n-1, 0, b-1, c-1, x);
 			}
 		}
-		*/
+
+		//Printing
+
+		// for (int i = 0; i < 4*n; ++i)
+		// {
+		// 	cout <<"I= "<<i <<" squares "<<tree[i].sumsquare<<" sum "<<tree[i].sum <<" Lazy Data "<<lazy[i].data<<" type "<<lazy[i].type<< '\n';
+		// }
+		
 	}
 
 
