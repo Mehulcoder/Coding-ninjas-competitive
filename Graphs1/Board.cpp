@@ -41,11 +41,12 @@ int helper(char board[][MAXN], int n, int m, int* visited){
 		{
 			if ()
 			{
-				/* code */
+				
 			}
 		}
 	}
 }
+
 int solve(char board[][MAXN],int n, int m)
 {
 	int* visited = new int[n]();
