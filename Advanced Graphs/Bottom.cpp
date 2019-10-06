@@ -80,6 +80,7 @@ void dfs(vector<int>* edges, int start, int* visited, stack<int> &s){
 }
 
 unordered_set<unordered_set<int>*>* kosaraju(vector<int>* edges, vector<int>* edgest, int v){
+	
 	//Initialize an empty set of sets for the answer
 	unordered_set<unordered_set<int>*>* ans = new unordered_set<unordered_set<int>*>();
 
@@ -137,6 +138,7 @@ int main( int argc , char ** argv )
 	cin.tie(NULL) ;
 
 	while(1){
+
 		int v, e;
 		cin>>v;
 		if (v==0)
@@ -157,30 +159,65 @@ int main( int argc , char ** argv )
 		}
 
 		unordered_set<unordered_set<int>*>* components = kosaraju(edges, edgest, v);
+		// auto itt = components->begin();
+		// while(itt!=components->end()){
+		// 	auto itt2 = (*itt)->begin();
+		// 	while(itt2!=(*itt)->end()){
+		// 		cout << *itt2+1 << ' ';
+		// 		itt2++;
+		// 	}
+		// 	itt++;
+		// 	cout << '\n';
+		// }
+		
+	//	cout << (*components).size() << '\n';		
 
 		auto it = components->begin();
-		while(it!=components->end()){
+		vector<int> ans;
+		while(it!=components->end())
+		{	
+			int flag = 0;
 			auto it2 = (*it)->begin();
-			while(it2!=(*it)->end()){
-				int i = 0;
-				for (i = 0; i < edges[*it2].size(); ++i)
+			while(it2!=(*it)->end())
+			{		
+				//int i = 0;
+				for (int i = 0; i < edges[*it2].size(); ++i)
 				{
-					if (it->count(edges[*it2].at(i)) == 0)
+
+					if ((*it)->count(edges[*it2].at(i)) == 0)
 					{
+						flag = 1;
 						break;
+
 					}
 				}
-				if (i==edges[*it2].size())
+				if (flag == 1)
 				{
 					break;
 				}
 				it2++;
 			}
-			while(it2!=(*it)->end()){
-				cout << *it2 << ' ';
+			if (flag == 0)
+			{
+				//vector<int> ans;
+				it2 = (*it)->begin();
+				while(it2!=(*it)->end())
+				{
+					ans.push_back(*it2 + 1);
+					//cout << *it2 + 1<< ' ';
+					it2++;
+				}
+				
+				//cout <<'\n';
+				//break;
 			}
-			cout <<'\n';
+			
 			it++;
+		}
+		sort(ans.begin(), ans.end());
+		for (int i = 0; i < ans.size(); ++i)
+		{
+			cout<<ans.at(i)<<" ";
 		}
 	}
 
