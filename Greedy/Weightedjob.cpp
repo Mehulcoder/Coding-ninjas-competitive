@@ -35,91 +35,73 @@ Sample Output
 
 
 #include <bits/stdc++.h>
-
 using namespace std;
+typedef long long ll;
 
-// A job has start time, finish time and profit. 
-class Job 
-{public:
-    int start, finish, profit; 
-}; 
-  
-// A utility function that is used for sorting events 
-// according to finish time 
-bool jobComparataor(Job s1, Job s2) 
-{ 
-    return (s1.finish < s2.finish); 
-} 
-  
-// Find the latest job (in sorted array) that doesn't 
-// conflict with the job[i]. If there is no compatible job, 
-// then it returns -1. 
-int latestNonConflict(Job arr[], int i) 
-{ 
-    for (int j=i-1; j>=0; j--) 
-    { 
-        if (arr[j].finish <= arr[i-1].start) 
-            return j; 
-    } 
-    return -1; 
-} 
-  
-// A recursive function that returns the maximum possible 
-// profit from given array of jobs.  The array of jobs must 
-// be sorted according to finish time. 
-int findMaxProfitRec(Job arr[], int n) 
-{ 
-    // Base case 
-    if (n == 1) return arr[n-1].profit; 
-  
-    // Find profit when current job is inclueded 
-    int inclProf = arr[n-1].profit; 
-    int i = latestNonConflict(arr, n); 
-    if (i != -1) 
-      inclProf += findMaxProfitRec(arr, i+1); 
-  
-    // Find profit when current job is excluded 
-    int exclProf = findMaxProfitRec(arr, n-1); 
-  
-    return max(inclProf,  exclProf); 
-} 
-  
-// The main function that returns the maximum possible 
-// profit from given array of jobs 
-int findMaxProfit(Job arr[], int n) 
-{ 
-    // Sort jobs according to finish time 
-    sort(arr, arr+n, jobComparataor); 
-  
-    return findMaxProfitRec(arr, n); 
-} 
-int main( int argc , char ** argv )
-{
-	ios_base::sync_with_stdio(false) ; 
-	cin.tie(NULL) ; 
-	
-	int n;
-	cin>>n;
+struct job{
+    ll start, finish, profit;
 
-	Job* arr = new Job[n];
-	for (int i = 0; i < n; ++i)
-	{
-		int a,b,c;
-		cin>>a>>b>>c;
-		Job temp;
-		temp.start = a;
-		temp.finish = b;
-		temp.profit = c;
+    job(ll s, ll f, ll p){
+        start = s;
+        finish = f;
+        profit = p;
+    }
+};
 
-		arr[i] = temp;
-	}
+bool compare(job a, job b){
+    return a.finish < b.finish;
+}
 
-	cout << findMaxProfit(arr, n) << '\n';
+ll search(vector<job> *input, ll limit, ll si, ll ei){
+    if(si > ei) return -1;
 
+    if(si == ei){
+        if((input->at(si)).finish <= limit) return si;
+        else return -1;
+    }
 
+    ll mid = (si+ei)/2;
+    if((input->at(mid)).finish <= limit){
+        ll answer = search(input, limit, mid+1, ei);
+        if(answer == -1) return mid;
+        else return answer;
+    }
+    else return search(input, limit, si, mid-1);
+}
 
-	return 0 ; 
+int main(){
+    ll n;
+    cin >> n;
 
+    vector<job> input;
+    for(ll i = 0; i < n; i++){
+        ll s, f, p;
+        cin >> s >> f >> p;
+        input.push_back(job(s, f, p));
+    }
 
+    sort(input.begin(), input.end(), compare);
 
+    ll *dp = new ll[n];
+    dp[0] = input[0].profit;
+    for(ll i = 1; i < n; i++){
+        ll include = input[i].profit;
+
+        ll id = -1;
+        id = search(&input, input[i].start, 0, i-1);
+        // for(ll j = i-1; j >= 0; j--){
+        //     if(input[j].finish <= input[i].start){
+        //         id = j;
+        //         break;
+        //     }
+        // }
+
+        if(id != -1){
+            include += dp[id];
+        }
+
+        dp[i] = max(dp[i-1], include);
+    }
+
+    cout << dp[n-1] << endl;
 }
