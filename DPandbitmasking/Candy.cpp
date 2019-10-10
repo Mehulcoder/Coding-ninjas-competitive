@@ -46,18 +46,58 @@ typedef unordered_set<int> useti;
 #define f first
 #define s second
 #define MOD 1000000007
+#define MAXN 16
 
+int go(int like[][MAXN], int n, int student, int mask, int* dp){
 
+	int ans = 0;
+
+	if (student>=n)
+	{
+		return 1;
+	}
+
+	if (dp[mask]!=-1)
+	{
+		return dp[mask];
+	}
+
+	for (int i = 0; i < n; ++i)
+	{
+		if (!(mask&(1<<i)) && (like[student][i] == 1))
+		{
+			//cout << "i: "<<i<<" mask: "<<mask << '\n';
+			ans = ans+go(like, n, student+1, mask|(1<<i), dp);
+		}
+	}
+
+	dp[mask] = ans;
+	return ans;
+}
+
+long long solve(int like[][MAXN],int N)
+{
+	int* dp = new int[1<<N];
+	for (int i = 0; i < (1<<N); ++i)
+	{
+		dp[i] = -1;
+	}
+	return go(like,N, 0, 0, dp);
+}
 int main( int argc , char ** argv )
 {
 	ios_base::sync_with_stdio(false) ; 
 	cin.tie(NULL) ; 
 	
+	int n,like[MAXN][MAXN];
+	cin>>n;
+	for(int i = 0; i < n ; i++){
+		for(int j = 0; j < n; j++){
+			cin>>like[i][j];
+		}
+	}
+	cout<<solve(like,n)<<endl;
 
-
-
-	return 0 ; 
-
-
+	return 0 ;
 
 }
