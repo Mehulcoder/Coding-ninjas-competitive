@@ -52,7 +52,7 @@ long long go(vector<vector<long long>> worker, long long area){
 		// cout << "Worker: "<<current_worker << '\n';
 		// cout << "Timegap: "<<time_gap << '\n';
 		
-		area_done += time_gap*(worker.at(current_worker)[1]);
+		area_done += time_gap*(worker.at(current_worker)[2]);
 
 		// cout <<"Cost: "<<cost<< '\n';
 		// cout <<"Area done: "<<area_done<< '\n'<<endl;
