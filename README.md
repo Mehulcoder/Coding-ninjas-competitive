@@ -6,8 +6,6 @@ This will have solutions to all the problems that are included in Coding Ninja's
 
 The repository contains solutions to various  problems on Coding Ninjas CP Course.
 **The code written is purely original & completely my own.**  
-The solutions for the following types of questions are available :-
-
 
 ## How to contribute?
 
