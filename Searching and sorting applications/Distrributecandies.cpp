@@ -19,46 +19,37 @@ Help Shaky in finding out what is the maximum number of candies which a student 
 */
 
 
-#include <bits/stdc++.h>
-
+#include<bits/stdc++.h>
 using namespace std;
-int is_possible(vector<int> v, int k, int mid){
-	int n = v.size();
-	int givento = 0;
 
-	int i = 0;
-	while(i<n){
-		givento += v.at(i)/mid;
-		
-	}
+
+int go(int* arr, int k,int n){
+
+	sort(arr,arr+n);
 	
-	return(givento >= k);
-}
-
-int go(vector<int> v, int k){
-
-	int n = v.size();
-	sort(v.begin(), v.end());
-	
-	int max_candies = v.at(n-1);
+	int max_candies = arr[n-1];
 	int min_candies = 0;
-	int mid = (min_candies+max_candies)/2;
-
-	int i = 0;
-	int ans = 0;
+	int mid ;
+	int ans = 1;
 	
+    
 	while(max_candies>=min_candies){
-		if (is_possible(v, k, mid))
-		{
-			ans = max(ans, mid);
-			min_candies = mid+1;
-			mid = (min_candies+max_candies)/2;
-
-		}else{
-			max_candies = mid-1;
-			mid = (min_candies+max_candies)/2;
-		}
-	}
+       mid = (min_candies+max_candies)/2;
+        int given=0;
+        for(int i=0;i<n;i++)
+        {
+            given+=arr[i]/mid;
+        }
+        
+        if(given>=k){
+            ans=max(ans,mid);
+            min_candies=mid+1;
+            }
+        else{
+            max_candies=mid-1;
+        }
+               
+        }
 	
 	return ans;
 
@@ -67,25 +58,18 @@ int go(vector<int> v, int k){
 
 
 
-int main( int argc , char ** argv )
+int main( )
 {
-	ios_base::sync_with_stdio(false) ; 
-	cin.tie(NULL) ;
-
 	int t;
 	cin>>t;
 
 	while(t--){
 		int n, k;
 		cin>>n>>k;
-		int m=n;
-		std::vector<int> v;
-		while(m--){
-			int a;
-			cin>>a;
-			v.push_back(a);
-		}
-		cout << go(v,k) << '\n';
+		int* arr=new int[n];
+        for(int i=0;i<n;i++)
+            cin>>arr[i];
+		cout << go(arr,k,n) << endl;
 	}
 	
 	return 0 ; 
