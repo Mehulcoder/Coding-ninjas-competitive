@@ -34,7 +34,7 @@ Number of ways are - 4 total i.e. (1,1,1,1), (1,1, 2), (1, 3) and (2, 2).
 #include <bits/stdc++.h>
 
 using namespace std;
-int countWaysToMakeChange(int S[], int n, int m){
+int countWaysToMakeChange(int S[], int m, int n){
 	int i, j, x, y; 
   
     // We need n+1 rows as the table  
