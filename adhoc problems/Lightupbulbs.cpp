@@ -5,7 +5,6 @@
 
 */
 
-
 /*
 				PROBLEM STATEMENT
 A bulb can be ‘ON’ or ‘OFF’. Mr. Navdeep got ‘n’ number of bulbs and their status, whether they are ‘ON’ or ‘OFF’. Their status is represented in a string of size ‘n’ consisting of 0’s and 1’s, where ‘0’ represents the bulb is in ‘OFF’ condition and ‘1’ represent the bulb is ‘ON’. Mr. Navdeep has been given the task to light up all the bulbs.
@@ -32,7 +31,7 @@ First, Reverse substring (0, 1): “01000” -> “10000”, COST = 1
 Second, Invert substring (1, 4): “10000” -> “11111”, COST = 10
 Total cost = 1+10 => 11
 */
-
+/*
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -91,4 +90,40 @@ int main( int argc , char ** argv )
 
 
 }
+*/
 
+#include <bits/stdc++.h>
+
+using namespace std;
+int main()
+{
+	long long n, x, y, num = 0;
+	//num = no. of reverse operations required   to put all the zeros together so that only one light up operation is required
+	cin >> n >> x >> y;
+	string s;
+	cin >> s;
+	s = s + '1';
+	//no. of reverse operations required = no. of continuos segments of zeros - 1
+	//that's why I added 1 at the end of string to count no. of changes from zero to one
+	//example : s = 0011100010 in this case num= 3 -1 = 2
+	for (int i = 1; i < n + 1; i++)
+	{
+		if (s[i] == '1')
+		{
+			if (s[i - 1] == '0')
+			{
+				num++;
+			}
+		}
+	}
+	if (num == 0)
+	{
+		cout << "0";
+		return 0;
+	}
+	long long ans = min(num * y, (num - 1) * x + y);
+	//num*y = cost of lighting all the segments of zeros in our example it will be 3*y as there are 3 segments of zeros
+	//(num-1)*x = cost of reverse operations required to get one continuos segment + 1*y (cost of lighting up that 1 segment)
+	cout << ans;
+	return 0;
+}
