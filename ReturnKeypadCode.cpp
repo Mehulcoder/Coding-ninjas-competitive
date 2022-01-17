@@ -23,54 +23,71 @@ cf
 */
 
 
-
-#include <string>
+#include<iostream>
 using namespace std;
 
-int keypad(int num, string output[]){
-    /* Insert all the possible combinations of the integer number into the output string array. You do not need to
-    print anything, just return the number of strings inserted into the array.
-    */
-    string input;
-    if(num == 0){
-        output[0] = "";
-        return 1;
+string getKeypadString(int c){
+    if(c==2) return "abc";
+    else if (c==3) return "def";
+    else if (c==4) return "ghi";
+    else if (c==5) return "jkl";
+    else if (c==6) return "mno";
+    else if (c==7) return "pqrs";
+    else if (c==8) return "tuv";
+    else if (c==9) return "wxyz";
+    else return "";
+}
+
+int32_t keypad(int n,string output[]){
+    if(n==0){
+        cout<<"";
+        return 1 ;
     }
-    
-        int n = num%10;
-        num = num/10;
-        int smalloutputsize = keypad(num, output);
-        switch(n){
-            case 2: input = "abc";
-                break;
-            case 3: input = "def";
-                break;
-            case 4: input = "ghi";
-                break;
-            case 5: input = "jkl";
-                break;
-            case 6: input = "mno";
-                break;
-            case 7: input = "pqrs";
-                break;
-            case 8: input = "tuv";
-                break;
-            case 9: input = "wxyz";
-                break;
-               
-    }
-    int ans_size=smalloutputsize*(input.size());
-    string temp[ans_size];
+
+    int smallNumber = n/10;
+    int lastDigit = n % 10;
+
+    int smallerOutput = keypad(smallNumber,output);
+    string temp[smallerOutput*getKeypadString(lastDigit).length()];
+
     int k=0;
-    for(int i=0; i<smalloutputsize; i++){
-        for(int j=0; j<input.size(); j++){
-            temp[k] = output[i]+input[j];
+    for (int i = 0;i<=smallerOutput-1;i++){
+        for(int j=0;j<getKeypadString(lastDigit).length();j++){
+            temp[k] = output[i] + getKeypadString(lastDigit)[j];
             k++;
         }
-        
     }
-    for(int i=0; i<ans_size; i++){
+
+    for (int i = 0;i<=smallerOutput*getKeypadString(lastDigit).length()-1;i++){
         output[i] = temp[i];
+        cout<<output[i]<<" ";
     }
-    return input.size()*smalloutputsize;
+    return smallerOutput*getKeypadString(lastDigit).length();
 }
+
+int getNumberLength(int n){
+    if(n==0)
+        return 1;
+    else{
+       return  getNumberLength(n/10) * getKeypadString(n%10).length();
+    }
+}
+
+int main(){
+    int n;
+    cin >> n;
+    int size = getNumberLength(n);
+
+    // cout << size;
+
+    string *output= new string[size];
+    // string output[size];
+    keypad(n,output);
+    for(int i=0;i<size;i++){
+        cout<<output[i]<<endl;
+    }
+
+    delete[] output;
+    
+}
+
