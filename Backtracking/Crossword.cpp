@@ -186,6 +186,7 @@ bool crossWordHelper(string input[], int size, int index){
 						return true;
 					}
 					resetHorizontal(i, j, state, length);
+					set_value(state,length);//when you reset then make helper also false.(not necessary but makes things clear.
 				}
  
 				if(isValidVertical(i, j, input[index])){
@@ -194,6 +195,7 @@ bool crossWordHelper(string input[], int size, int index){
 						return true;
 					}
 					resetVertical(i, j, state, length);
+					set_value(state,length);//when you reset then make helper also false.
 				}
  
 			}
